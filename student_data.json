@@ -1,0 +1,44 @@
+{
+    "12": {
+        "Name": "Digvijaysingh",
+        "Marks": 97.0,
+        "Address": "Bengalore",
+        "Placed": true
+    },
+    "32": {
+        "Name": "Sam Dum",
+        "Marks": 92.0,
+        "Address": "Kolkata",
+        "Placed": true
+    },
+    "321": {
+        "Name": "rahul",
+        "Marks": 90.0,
+        "Address": "adas",
+        "Placed": true
+    },
+    "131": {
+        "Name": "om baba",
+        "Marks": 33.0,
+        "Address": "assam",
+        "Placed": false
+    },
+    "342": {
+        "Name": "sita",
+        "Marks": 23.0,
+        "Address": "delhi",
+        "Placed": true
+    },
+    "213": {
+        "Name": "sachin",
+        "Marks": 45.0,
+        "Address": "zsfssd",
+        "Placed": true
+    },
+    "131221": {
+        "Name": "dakala",
+        "Marks": 23.0,
+        "Address": "2131 haands ddad213",
+        "Placed": false
+    }
+}

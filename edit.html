@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Edit Student</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+
+            min-height: 100vh;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+
+            background-color: white;
+
+            padding: 35px;
+
+            border-radius: 12px;
+
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+        }
+
+        h1 {
+            text-align: center;
+
+            margin-top: 0;
+            margin-bottom: 30px;
+
+            color: #222;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+
+            font-weight: bold;
+
+            margin-bottom: 7px;
+
+            color: #333;
+        }
+
+        input,
+        select {
+            width: 100%;
+
+            padding: 12px;
+
+            font-size: 16px;
+
+            border: 1px solid #ccc;
+
+            border-radius: 6px;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+
+            border-color: #2563eb;
+
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+        }
+
+        input[readonly] {
+            background-color: #f1f1f1;
+            cursor: not-allowed;
+        }
+
+
+        /* BUTTON CONTAINER */
+
+        .buttons {
+            display: flex;
+
+            gap: 12px;
+
+            margin-top: 25px;
+        }
+
+
+        /* COMMON BUTTON STYLE */
+
+        .buttons button {
+            flex: 1;
+
+            padding: 13px;
+
+            border: none;
+
+            border-radius: 6px;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+
+        /* UPDATE BUTTON */
+
+        .update-btn {
+            background-color: #2563eb;
+
+            color: white;
+        }
+
+        .update-btn:hover {
+            background-color: #1d4ed8;
+        }
+
+
+        /* CANCEL BUTTON */
+
+        .cancel-btn {
+            background-color: #dc2626;
+
+            color: white;
+        }
+
+        .cancel-btn:hover {
+            background-color: #b91c1c;
+        }
+
+
+        #message {
+            text-align: center;
+
+            margin-top: 15px;
+
+            min-height: 20px;
+
+            font-size: 14px;
+        }
+
+
+        @media (max-width: 600px) {
+
+            .container {
+                margin: 20px;
+
+                padding: 25px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+    <h1>Edit Student</h1>
+
+
+    <form id="editForm">
+
+
+        <div class="form-group">
+
+            <label>Roll Number</label>
+
+            <input
+                type="number"
+                id="roll"
+                readonly
+            >
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>Name</label>
+
+            <input
+                type="text"
+                id="name"
+                required
+            >
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>Marks</label>
+
+            <input
+                type="number"
+                id="marks"
+                required
+            >
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>Address</label>
+
+            <input
+                type="text"
+                id="address"
+                required
+            >
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>Placed</label>
+
+            <select id="placed" required>
+
+                <option value="true">
+                    Yes
+                </option>
+
+                <option value="false">
+                    No
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="buttons">
+
+            <button
+                type="submit"
+                class="update-btn"
+            >
+                Update Student
+            </button>
+
+
+            <button
+                type="button"
+                class="cancel-btn"
+                onclick="cancelEdit()"
+            >
+                Cancel
+            </button>
+
+        </div>
+
+
+        <div id="message"></div>
+
+
+    </form>
+
+</div>
+
+
+<script>
+
+const params = new URLSearchParams(window.location.search);
+
+const roll = params.get("roll");
+
+
+/* Load student data */
+
+async function loadStudent() {
+
+    try {
+
+        const response = await fetch(
+            `http://127.0.0.1:8000/get_student/${roll}`
+        );
+
+        const student = await response.json();
+
+        document.getElementById("roll").value = roll;
+
+        document.getElementById("name").value = student.Name;
+
+        document.getElementById("marks").value = student.Marks;
+
+        document.getElementById("address").value = student.Address;
+
+        document.getElementById("placed").value =
+            student.Placed.toString();
+
+    }
+
+    catch (error) {
+
+        console.log(error);
+
+    }
+
+}
+
+
+/* Call the function when page loads */
+
+loadStudent();
+
+
+/* Update student */
+
+document.getElementById("editForm").addEventListener(
+    "submit",
+    async function(event) {
+
+        event.preventDefault();
+
+
+        const studentData = {
+
+            roll: Number(
+                document.getElementById("roll").value
+            ),
+
+            name: document.getElementById("name").value,
+
+            marks: Number(
+                document.getElementById("marks").value
+            ),
+
+            address: document.getElementById("address").value,
+
+            placed:
+                document.getElementById("placed").value === "true"
+
+        };
+
+
+        try {
+
+            const response = await fetch(
+                `http://127.0.0.1:8000/edit_student/${roll}`,
+                {
+                    method: "PUT",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify(studentData)
+
+                }
+            );
+
+
+            if (response.ok) {
+
+                window.location.href = "students.html";
+
+            }
+
+            else {
+
+                alert("Update failed");
+
+            }
+
+        }
+
+        catch (error) {
+
+            console.log(error);
+
+            alert("Unable to connect to server");
+
+        }
+
+    }
+);
+
+
+/* Cancel button */
+
+function cancelEdit() {
+
+    window.location.href = "students.html";
+
+}
+
+</script>
+
+</body>
+
+</html>
